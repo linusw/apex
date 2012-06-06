@@ -36,9 +36,9 @@
 
 # define CF_WIDTH		(16)
 # define CF_ADDR_MULT		(1)
-# define CF_REG			(1<<12)	/* REG line for register access */
-# define CF_ALT			(1<<10)	/* A10 line for data read */
-# define CF_ATTRIB		(1<<9) /* A9 line for attribute access */
+# define CF_REG			(1<<11)	/* REG line for register access */
+# define CF_ALT			(1<<9)	/* A10 line for data read */
+# define CF_ATTRIB		(1<<8) /* A9 line for attribute access */
 
 #endif
 
