@@ -190,7 +190,7 @@ static inline unsigned long swab32(unsigned long l)
 
 static inline const char* block_driver (void)
 {
-  return lookup_alias_or_env ("fis-drv", CONFIG_DRIVER_FIS_BLOCKDEVICE);
+  return lookup_variable_or_env ("fis-drv", CONFIG_DRIVER_FIS_BLOCKDEVICE);
 }
 
 static inline int deleted_entry (struct fis_descriptor* partition)
