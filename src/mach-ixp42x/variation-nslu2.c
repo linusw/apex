@@ -21,7 +21,7 @@
 */
 
 #include <config.h>
-#include <alias.h>
+#include <variables.h>
 #include <service.h>
 #include <apex.h>
 
@@ -32,7 +32,7 @@ static void variation_init (void)
   int button_pressed = (GPIO_INR & (1<<GPIO_I_POWERBUTTON)) != 0;
 
   if (button_pressed)
-    alias_set ("variation", CONFIG_VARIATION_SUFFIX);
+    variable_set ("variation", CONFIG_VARIATION_SUFFIX);
 
   MASK_AND_SET (GPIO_OUTR, 1<<GPIO_I_LEDSTATUS,
 		button_pressed ? (1<<GPIO_I_LEDSTATUS): 0);
