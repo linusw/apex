@@ -102,7 +102,7 @@ int cmd_pause (int argc, const char** argv)
 static __command struct command_d c_pause = {
   .command = "pause",
   .func = cmd_pause,
-  COMMAND_DESCRIPTION ("pause for 2 seconds")
+  COMMAND_DESCRIPTION ("pause for 5 seconds")
   COMMAND_HELP(
 "pause [MODE]\n"
 "  Pause for 5 seconds using one of several timing functions.\n"
