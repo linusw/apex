@@ -1,4 +1,4 @@
-#!/bin/make
+#!/usr/bin/env make
 #
 # APEX top-level Makefile
 #   based on Linux Kernel Makefile 2.6.26-rc8
