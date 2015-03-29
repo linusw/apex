@@ -53,7 +53,7 @@ extern char host_mac_address[];
 
 static void set_variables (void)
 {
-#if defined (CONFIG_CMD_SET)
+#if defined (CONFIG_CMD_SETUNSET)
   char sz[80];
   sprintf (sz, "%d.%d.%d.%d",
 	   host_ip_address[0], host_ip_address[1],
@@ -269,10 +269,10 @@ int cmd_ipconfig (int argc, const char** argv)
       memset (host_ip_address, 0, 4);
       memset (server_ip_address, 0, 4);
       memset (gw_ip_address, 0, 4);
-#if defined (CONFIG_CMD_ALIAS)
-      alias_unset ("hostip");
-      alias_unset ("serverip");
-      alias_unset ("gatewayip");
+#if defined (CONFIG_CMD_SETUNSET)
+      variable_unset ("hostip");
+      variable_unset ("serverip");
+      variable_unset ("gatewayip");
 #endif
       goto done;
     }

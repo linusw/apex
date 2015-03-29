@@ -23,7 +23,7 @@
 #include <command.h>
 #include <driver.h>
 #include <environment.h>
-#include <alias.h>
+#include <variables.h>
 #include <describe.h>
 
 int cmd_parse (int argc, const char** argv)

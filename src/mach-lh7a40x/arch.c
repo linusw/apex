@@ -21,7 +21,7 @@
 #include <config.h>
 #include "hardware.h"
 #include <linux/kernel.h>
-#include "alias.h"
+#include "variables.h"
 
 /* determine_arch_number
 
@@ -47,5 +47,5 @@ void determine_arch_number (void)
   }
 
   snprintf (sz, 10, "%d", arch_id);
-  alias_set ("arch-number", sz);
+  variable_set ("arch-number", sz);
 }

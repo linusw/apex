@@ -22,7 +22,7 @@
 */
 
 #include <config.h>
-#include <alias.h>
+#include <variables.h>
 #include <service.h>
 #include <apex.h>
 
@@ -58,7 +58,7 @@ static void variation_init (void)
   if (!(UART_STATUS & UART_STATUS_RXFE)) {
     char c = UART_DATA & UART_DATA_DATAMASK;
     if (c == '!')
-      alias_set ("variation", CONFIG_VARIATION_SUFFIX);
+      variable_set ("variation", CONFIG_VARIATION_SUFFIX);
   }
 }
 

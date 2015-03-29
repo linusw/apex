@@ -55,7 +55,7 @@ added to aid readability.
 static void variation_init (void)
 {
   if (is_reset_button_pressed ())
-    alias_set ("variation", "_alt"); 
+    variable_set ("variation", "_alt");
 }
 
 static __service_9 struct service_d variation_service = {

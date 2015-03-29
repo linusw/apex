@@ -277,7 +277,7 @@ static __env struct env_d e_jffs2_drv = {
 
 static inline const char* block_driver (void)
 {
-  return lookup_alias_or_env ("jffs2-drv", CONFIG_DRIVER_JFFS2_BLOCKDEVICE);
+  return lookup_variable_or_env ("jffs2-drv", CONFIG_DRIVER_JFFS2_BLOCKDEVICE);
 }
 
 static inline void read_node (void* pv, size_t ib, size_t cb)
