@@ -45,9 +45,9 @@
      how the data will be used.
 
      The throughput on the 79520 target as compared to a fast x86
-     notbook is noticeable.  It is possible that we'll get something
+     notebook is noticeable.  It is possible that we'll get something
      from a faster turnaround and overlapped acks.  As this isn't a
-     serious proble, considering the way that tftp is used, I'll leave
+     serious problem, considering the way that tftp is used, I'll leave
      it as is.
 
    o We need to select a random port number.  We need to see if there
@@ -219,7 +219,7 @@ static int tftp_receiver (struct descriptor_d* d,
 
 /* tftp_terminate
 
-   is the function used by ethernet_service() to deterine when to
+   is the function used by ethernet_service() to determine when to
    terminate the loop.  It return zero when the loop can continue, -1
    on timeout, and 1 when the configuration is complete.
 
