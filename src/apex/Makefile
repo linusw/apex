@@ -32,6 +32,7 @@ obj-$(CONFIG_CMD_LIST)		+= cmd-list.o
 obj-$(CONFIG_CMD_MEMTEST)	+= cmd-memtest.o
 obj-$(CONFIG_CMD_PAUSE)		+= cmd-pause.o
 obj-$(CONFIG_CMD_PARSE)		+= cmd-parse.o
+obj-$(CONFIG_CMD_REDBOOT)	+= cmd-redboot.o
 obj-$(CONFIG_CMD_SETUNSET)	+= cmd-setunset.o
 obj-$(CONFIG_CMD_WAIT)		+= cmd-wait.o
 obj-$(CONFIG_CMD_XRECEIVE)	+= cmd-xreceive.o

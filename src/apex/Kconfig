@@ -343,6 +343,13 @@ config CMD_NAND
 	help
 	  Defines NAND commands for testing.
 
+config CMD_REDBOOT
+	bool "HACK!!! Define redboot command for Linksys NSLU2"
+	depends on MACH_NSLU2
+	default n
+	help
+	  Defines 'redboot' command which calls redboot commands from Apex.
+
 endmenu
 
 config CRC32_LSB
