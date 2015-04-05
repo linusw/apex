@@ -46,8 +46,12 @@
  * so, most likely, you need to change them, if you want to use this hack
  */
 #define REDBOOT_CMD_BASE 0UL
-#define REDBOOT_CMD_PROC_FUNC_PTR (REDBOOT_CMD_BASE + 0x9ECCUL)
-#define REDBOOT_CMD_BUFFER ((void *)0xe1a00000UL)
+/* redboot's cmd_proc function */
+/* #define REDBOOT_CMD_PROC_FUNC_PTR (REDBOOT_CMD_BASE + 0x21c3cUL) */
+#define REDBOOT_CMD_PROC_FUNC_PTR (REDBOOT_CMD_BASE + 0x224ccUL)
+
+/* redboot's interractive command line buffer */
+#define REDBOOT_CMD_BUFFER ((char *)0x0006c0b8UL)
 
 #define MAX_CMDS        20
 #define MAX_CMD_LEN     50
@@ -58,26 +62,32 @@ char const chain_cmds[][MAX_CMD_LEN+1] = {
   "g\0",
 };
 
-typedef int *redboot_p1(char*);
+//typedef int *redboot_p1(char*);
+typedef void redboot_p1(void);
+
+typedef void redboot_p3(char *buff, int len, int always_0a);
 
 void call_redboot_cmd_proc(char *cmd)
 {
   int rbresult;
-  redboot_p1 *rbfunc;
+  redboot_p3 *rbfunc;
 
-  /*
-  char volatile **redboot_cmd_buff = REDBOOT_CMD_BUFFER;
+  char volatile *redboot_cmd_buff = REDBOOT_CMD_BUFFER;
 
-  strlcpy((char *)(*redboot_cmd_buff),
-      cmd,
-      MAX_CMD_LEN * sizeof(char));*/
+  DBG(2,"%s: peeking into redboot\n", __FUNCTION__);
 
-  rbfunc = (redboot_p1 *)REDBOOT_CMD_PROC_FUNC_PTR;
+  DBG(2, "%s: redboot cmd buffer (%x) '%s' cmd '%s' func \n",
+      __FUNCTION__, (unsigned int)redboot_cmd_buff, redboot_cmd_buff, cmd);
+
+  //DBG(2, "%s: prepbuffer '%s' rbfunc = %x\n", __FUNCTION__, cmd, (unsigned int)rbfunc);
+  strlcpy(redboot_cmd_buff, cmd, MAX_CMD_LEN * sizeof(char));
+
+  rbfunc = (redboot_p3 *)REDBOOT_CMD_PROC_FUNC_PTR;
   DBG(2, "%s: cmd '%s' rbfunc = %x\n", __FUNCTION__, cmd, (unsigned int)rbfunc);
 
-  rbresult = *rbfunc(cmd);
-  DBG(2, "rbresult %x\n", rbresult);
-
+  rbfunc(redboot_cmd_buff, strlen(redboot_cmd_buff)+1, 0x0a);
+  //DBG(2, "rbresult %x\n", rbresult);
+  DBG(2, "return red\n");
 }
 
 int cmd_redboot (int argc, const char** argv)
