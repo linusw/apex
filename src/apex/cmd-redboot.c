@@ -58,7 +58,7 @@
 char const chain_cmds[][MAX_CMD_LEN+1] = {
   "version\0",
   "ip_address -h 192.168.0.2\0",
-  "load -r -b 0x220000 netbsd.bin\0",
+  "load -r -b 0x220000 netbsd-nfs.bin\0",
   "g\0",
 };
 
