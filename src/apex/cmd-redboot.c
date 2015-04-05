@@ -53,8 +53,9 @@
 /* redboot's interractive command line buffer */
 #define REDBOOT_CMD_BUFFER ((char *)0x0006c0b8UL)
 
-#define MAX_CMDS        20
+#define MAX_CMD         20
 #define MAX_CMD_LEN     50
+#define MAX_ARG_LEN     20
 char const chain_cmds[][MAX_CMD_LEN+1] = {
   "version\0",
   "ip_address -h 192.168.0.2\0",
@@ -62,6 +63,78 @@ char const chain_cmds[][MAX_CMD_LEN+1] = {
   "g\0",
 };
 
+typedef void cmd_fun(int argc, char *argv[]);
+struct cmd {
+    char    *name;
+    char    *help;
+    char    *usage;
+    cmd_fun *fun;
+    struct cmd *sub_cmds, *sub_cmds_end;
+};
+
+/* the place where redboot cmd array is stored */
+#define RB_COMMANDS_BASE        (0x3ba64)
+#define REDBOOT_CMDS_COUNT      (22)
+
+struct cmd *pcmdsbase;
+
+
+void cmd_proc(char *mycmd)
+{
+  char argv[MAX_CMD][MAX_CMD_LEN];
+  int argc, arg_idx, i;
+  cmd_fun *cmdfun;
+  struct cmd *thiscmd;
+
+  pcmdsbase = (void *)RB_COMMANDS_BASE;
+  argc = 0;
+  arg_idx = 0;
+
+  DBG(2, "%s: preparing command '%s'\n", __FUNCTION__, mycmd);
+
+  for(i=0; mycmd[i]!='\0'; i++) {
+            if(mycmd[i]==' ') {
+                    argv[argc][arg_idx]='\0';
+                    DBG(2, "    '%s'\n", argv[argc]);
+                    argc++;
+                    arg_idx=0;
+            } else {
+                    if(arg_idx<MAX_ARG_LEN) {
+                            argv[argc][arg_idx]=mycmd[i];
+                            DBG(2, "%c ", argv[argc][arg_idx]);
+                            arg_idx++;
+                    } else {
+                            DBG(2,"OUT OF BOUNDS argc %d arg_idx %d\n", argc, arg_idx);
+                    }
+            }
+  }
+  argv[argc][arg_idx]='\0';
+  DBG(2, "cmd_proc argc %d\n", argc);
+  for(i=0; i<=argc; i++)
+    DBG(2, "    cmd_proc argv[%d] = '%s'\n", i, argv[i]);
+
+  cmdfun = 0;
+  for (i=0; i< REDBOOT_CMDS_COUNT; i++) {
+
+    thiscmd = pcmdsbase + i;
+    DBG(2, "    i=%d thiscmd = %x\n", i, (unsigned int)thiscmd);
+
+    if (!strcmp(thiscmd->name, argv[0])) {
+      cmdfun = thiscmd->fun;
+      DBG(2,"%s: Calling RB function %x for '%s' (matched on cmd index %d , '%s')\n",
+          __FUNCTION__, (unsigned int)cmdfun, argv[0], i, thiscmd->name);
+      cmdfun(argc, argv+1);
+      DBG(2, "returned\n");
+      return;
+    } else {
+      DBG(2, "    no match '%s' '%s'\n", argv[0], thiscmd->name);
+    }
+  }
+  DBG(2, "cmdfun %x (name = '%s')", (unsigned int)thiscmd, thiscmd ? thiscmd->name : 0);
+
+}
+
+#if 0
 //typedef int *redboot_p1(char*);
 typedef void redboot_p1(void);
 
@@ -89,6 +162,7 @@ void call_redboot_cmd_proc(char *cmd)
   //DBG(2, "rbresult %x\n", rbresult);
   DBG(2, "return red\n");
 }
+#endif
 
 int cmd_redboot (int argc, const char** argv)
 {
@@ -122,7 +196,8 @@ int cmd_redboot (int argc, const char** argv)
   printf("Calling redboot command '%s'\n", chain_cmds[cmdidx]);
 
   DBG(2, "6\n");
-  call_redboot_cmd_proc((char *)chain_cmds[cmdidx]);
+  //call_redboot_cmd_proc((char *)chain_cmds[cmdidx]);
+  cmd_proc((char *)chain_cmds[cmdidx]);
   DBG(2, "!!! Returned from RedBoot  !!!\n");
 
   return ERROR_NONE;
