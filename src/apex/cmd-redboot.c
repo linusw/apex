@@ -177,23 +177,23 @@ int cmd_redboot (int argc, const char** argv)
   unsigned int cmdidx;
 
   DBG(2, "%s: argc %d argv[0] '%s'\n", __FUNCTION__, argc, argv[0]);
-  DBG(2, "1\n");
+  DBG(3, "1\n");
   if (argc>1)
     DBG(2, "%s:         argv[1] '%s'\n", __FUNCTION__, argv[1]);
 
-  DBG(2, "2\n");
+  DBG(3, "2\n");
   if (argc > 2)
     return ERROR_PARAM;
 
   cmdidx = 0;
 
-  DBG(2, "3\n");
+  DBG(3, "3\n");
   if (argc >=2) {
     DBG(2, "redboot parse '%s'\n", argv[1]);
     cmdidx = simple_strtoul(argv[1], NULL, 0);
   }
 
-  DBG(2, "4\n");
+  DBG(3, "4\n");
   /*DBG(2, "cmdidx %ul redboot_cmd_buff '%s' chain_cmds[cmdidx] '%s'\n",
       cmdidx, redboot_cmd_buff, chain_cmds[cmdidx]);*/
   DBG(2, "cmdidx %u chain_cmds[cmdidx] '%s'\n",
@@ -203,10 +203,10 @@ int cmd_redboot (int argc, const char** argv)
   DBG(2, "5\n");
   printf("Calling redboot command '%s'\n", chain_cmds[cmdidx]);
 
-  DBG(2, "6\n");
+  DBG(3, "6\n");
   //call_redboot_cmd_proc((char *)chain_cmds[cmdidx]);
   cmd_proc((char *)chain_cmds[cmdidx]);
-  DBG(2, "!!! Returned from RedBoot  !!!\n");
+  DBG(3, "!!! Returned from our cmd_proc  !!!\n");
 
   return ERROR_NONE;
 }
