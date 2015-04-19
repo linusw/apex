@@ -188,7 +188,7 @@ int cmd_redboot (int argc, const char** argv)
 
   DBG(3, "3\n");
   if (argc >=2) {
-    DBG(2, "redboot parse '%s'\n", argv[1]);
+    DBG(2, "%s: parse '%s'\n", __FUNCTION__, argv[1]);
     cmdidx = simple_strtoul(argv[1], NULL, 0);
   }
 
