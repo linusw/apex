@@ -56,6 +56,7 @@
 #define MAX_CMD         20
 #define MAX_CMD_LEN     50
 #define MAX_ARG_LEN     20
+#define MAX_ARG_CNT     20
 char const chain_cmds[][MAX_CMD_LEN+1] = {
   "version\0",
   "ip_address -h 192.168.0.2\0",
@@ -81,39 +82,46 @@ struct cmd *pcmdsbase;
 
 void cmd_proc(char *mycmd)
 {
-  char argv[MAX_CMD][MAX_CMD_LEN];
-  int argc, arg_idx, i;
+  char *argv[MAX_ARG_CNT];
+  int argc, i;
   cmd_fun *cmdfun;
   struct cmd *thiscmd;
+  char cmdbuffer[MAX_CMD_LEN+1];
+  char *parg;
 
   pcmdsbase = (void *)RB_COMMANDS_BASE;
   argc = 0;
-  arg_idx = 0;
 
   DBG(2, "%s: preparing command '%s'\n", __FUNCTION__, mycmd);
+  strlcpy(cmdbuffer, mycmd, MAX_CMD_LEN);
 
-  for(i=0; mycmd[i]!='\0'; i++) {
-            if(mycmd[i]==' ') {
-                    argv[argc][arg_idx]='\0';
-                    DBG(2, "    '%s'\n", argv[argc]);
-                    argc++;
-                    arg_idx=0;
-            } else {
-                    if(arg_idx<MAX_ARG_LEN) {
-                            argv[argc][arg_idx]=mycmd[i];
-                            DBG(2, "%c ", argv[argc][arg_idx]);
-                            arg_idx++;
-                    } else {
-                            DBG(2,"OUT OF BOUNDS argc %d arg_idx %d\n", argc, arg_idx);
-                    }
-            }
+  /* skip any initial spaces */
+  for(i=0 ; (cmdbuffer[i]==' ') && (cmdbuffer[i]!='\0'); i++);
+  parg = &(cmdbuffer[i]);
+
+  for(; cmdbuffer[i]!='\0'; i++) {
+    if (cmdbuffer[i]==' ') {
+      cmdbuffer[i]='\0';
+      if (parg) {
+        argv[argc]=parg;
+
+        /* prepare for the next arg */
+        parg=NULL;
+        argc++;
+      }
+    } else {
+      if (!parg) parg=&(cmdbuffer[i]);
+    }
   }
-  argv[argc][arg_idx]='\0';
+  /* process the last parameter, too */
+  if (parg) argv[argc++]=parg;
+  argv[argc]=NULL;
+
   DBG(2, "cmd_proc argc %d\n", argc);
-  for(i=0; i<=argc; i++)
+  for(i=0; i<argc; i++)
     DBG(2, "    cmd_proc argv[%d] = '%s'\n", i, argv[i]);
 
-  cmdfun = 0;
+  cmdfun = NULL;
   for (i=0; i< REDBOOT_CMDS_COUNT; i++) {
 
     thiscmd = pcmdsbase + i;
@@ -124,7 +132,7 @@ void cmd_proc(char *mycmd)
       DBG(2,"%s: Calling RB function %x for '%s' (matched on cmd index %d , '%s')\n",
           __FUNCTION__, (unsigned int)cmdfun, argv[0], i, thiscmd->name);
       cmdfun(argc, argv+1);
-      DBG(2, "returned\n");
+      DBG(2, "%s: Returned after exec of '%s' command\n", __FUNCTION__, argv[0]);
       return;
     } else {
       DBG(2, "    no match '%s' '%s'\n", argv[0], thiscmd->name);
