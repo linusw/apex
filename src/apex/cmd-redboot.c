@@ -131,7 +131,7 @@ void cmd_proc(char *mycmd)
       cmdfun = thiscmd->fun;
       DBG(2,"%s: Calling RB function %x for '%s' (matched on cmd index %d , '%s')\n",
           __FUNCTION__, (unsigned int)cmdfun, argv[0], i, thiscmd->name);
-      cmdfun(argc, argv+1);
+      cmdfun(argc, argv);
       DBG(2, "%s: Returned after exec of '%s' command\n", __FUNCTION__, argv[0]);
       return;
     } else {
