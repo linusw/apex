@@ -21,7 +21,7 @@
    This is a very hardware dependent (read Linksys NLSU2 version
    dependent) hack and relies on the fact my (lacking) reverse
    engineering skills are good enough to identify the correct
-   function in the dissaembled RedBoot code from one of my NSLU2s.
+   function in the disassembled RedBoot code from one of my NSLU2s.
 
    Note: Since my goal is to boot netbsd, which, apparently only
    needs the binary blob and has its own driver I might consider
@@ -50,7 +50,7 @@
 /* #define REDBOOT_CMD_PROC_FUNC_PTR (REDBOOT_CMD_BASE + 0x21c3cUL) */
 #define REDBOOT_CMD_PROC_FUNC_PTR (REDBOOT_CMD_BASE + 0x224ccUL)
 
-/* redboot's interractive command line buffer */
+/* redboot's interactive command line buffer */
 #define REDBOOT_CMD_BUFFER ((char *)0x0006c0b8UL)
 
 #define MAX_CMD         20
