@@ -54,12 +54,12 @@
 #define REDBOOT_CMD_BUFFER ((char *)0x0006c0b8UL)
 
 #define MAX_CMD         20
-#define MAX_CMD_LEN     50
+#define MAX_CMD_LEN     100
 #define MAX_ARG_LEN     20
 #define MAX_ARG_CNT     20
 char const chain_cmds[][MAX_CMD_LEN+1] = {
   "ip_address -h 192.168.0.2\0",
-  "load -r -b 0x200000 netbsd-nfs.bin\0",
+  "load -r -b 0x200000 -h 192.168.0.2 netbsd-nfs.bin\0",
   "g\0",
 };
 
