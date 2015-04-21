@@ -540,6 +540,14 @@ endif # $(dot-config)
 #all: apex
 all: apex apex.bin
 
+# apex.bin is always below 1MB and I don't care about changing the FIS layout
+# so I assume the image is always below that limit. The +16 bytes is copied from the
+# /usr/share/flash-kernel/functions and its purpose is to probably make sure there
+# are no alignment issues
+apex_nslu2.flash: apex.bin
+	perl -e 'print pack("N4", shift)' "$$(expr $$(stat -c '%s' $$(readlink apex.bin)) + 16)" > $@
+	cat $^ >> $@
+
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os
 else
