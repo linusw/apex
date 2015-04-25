@@ -548,6 +548,15 @@ apex_nslu2.flash: apex.bin
 	perl -e 'print pack("N4", shift)' "$$(expr $$(stat -c '%s' $$(readlink apex.bin)) + 16)" > $@
 	cat $^ >> $@
 
+.PHONY: empty_initrd.flash
+# RedBoot will expect to have a Sercom header for the ramdisk image at
+# 0x50160000. The information there must be valid otherwise it will crash, so we
+# prepare a dummy/empty minimal inirrd image
+empty_nslu2.flash:
+	perl -e 'print pack("N4", shift)' 16 > $@
+	perl -e 'print pack("H[32]", ffffffffffffffffffffffffffffffff)' >> $@
+
+
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os
 else
