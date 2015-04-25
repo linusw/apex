@@ -4,6 +4,14 @@ APEX Boot Loader
 ================
 
 TODO:
+  o 2015.apr.26
+    o Make the REDBOOT_CMD_PROC_FUNC_PTR define a configurable option
+      with the current value as default.
+    o Make the contents of chain_cmds configurable, too (with current
+      syntax)
+    o Change the syntax of the RedBoot command so it accepts the exact
+      redboot commans as parameters instead of simple indexes in a
+      hardcoded char const [][].
 
   o 2011.sep 16
     o Pushed mx51 code to git hosts.  It doesn't initialize properly
