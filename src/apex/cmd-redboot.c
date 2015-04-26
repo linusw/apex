@@ -84,7 +84,7 @@ void cmd_proc(char *mycmd)
   int argc, i;
   cmd_fun *cmdfun;
   struct cmd *thiscmd;
-  char *cmdbuffer = REDBOOT_CMD_BUFFER;
+  char cmdbuffer[MAX_CMD_LEN+1];
   char *parg;
 
   pcmdsbase = (void *)RB_COMMANDS_BASE;
