@@ -545,8 +545,11 @@ all: apex apex.bin
 # /usr/share/flash-kernel/functions and its purpose is to probably make sure there
 # are no alignment issues
 apex_nslu2.flash: apex.bin
-	perl -e 'print pack("N4", shift)' "$$(expr $$(stat -c '%s' $$(readlink apex.bin)) + 16)" > $@
+	$(eval SIZE=$(shell echo $$(expr $$(stat -c '%s' $$(readlink apex.bin)) + 16)))
+	perl -e 'print pack("N4", shift)' "$(SIZE)" > $@
 	cat $^ >> $@
+	@echo "Load with:  load -r -b 0x200000 -h 192.168.0.2 $@"
+	@echo Flash with: fis write -f 0x50060000 -b 0x200000 -l $(SIZE)
 
 .PHONY: empty_initrd.flash
 # RedBoot will expect to have a Sercom header for the ramdisk image at
